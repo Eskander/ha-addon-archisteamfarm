@@ -13,7 +13,7 @@ fi
 if [ ! -f /config/config/IPC.config ]; then
     echo "Copying config"
     cp /IPC.config /config/config/IPC.config
-fo
+fi
 
 echo "Fixing permissions"
 chown -R asf:asf /config
