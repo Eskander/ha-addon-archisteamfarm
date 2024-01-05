@@ -1,3 +1,5 @@
+## 1.4
+- ArchiSteamFarm V5.5.1.4
 ## 1.3
 - ArchiSteamFarm V5.5.1.2 
 ## 1.2
