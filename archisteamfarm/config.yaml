@@ -1,5 +1,5 @@
 name: ArchiSteamFarm
-version: "1.4"
+version: "1.5"
 slug: archisteamfarm
 description: C# application with primary purpose of farming Steam cards from multiple accounts simultaneously
 url: https://github.com/Eskander/ha-addon-archisteamfarm
@@ -18,4 +18,9 @@ ports:
 ports_description:
   1242/tcp: Web interface
 map:
-  - addon_config:rw
+  - type: addon_config
+    read_only: false
+    path: /config
+  - type: data
+    read_only: false
+    path: /app/logs

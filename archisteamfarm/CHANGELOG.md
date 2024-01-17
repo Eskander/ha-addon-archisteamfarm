@@ -1,3 +1,5 @@
+## 1.5
+- Use new Supervisor map (>= 2023.12.1)
 ## 1.4
 - ArchiSteamFarm V5.5.1.4
 ## 1.3
