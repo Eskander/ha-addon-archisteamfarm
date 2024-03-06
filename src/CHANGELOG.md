@@ -1,3 +1,5 @@
+## 1.6
+- Bump ASF version
 ## 1.5
 - Use new Supervisor map (>= 2023.12.1)
 ## 1.4
