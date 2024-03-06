@@ -1,14 +1,14 @@
 #!/bin/sh
 
-if [ ! -f /config/config/IPC.config ]; then
-    echo "Initializing config"
-    mkdir -pv /config/config
-    cp -v /IPC.config /config/config/IPC.config
+if [ ! -f /app/config/config/IPC.config ]; then
+    echo "Initializing config..."
+    mkdir -pv /app/config/config
+    cp -v /IPC.config /app/config/config/IPC.config
 fi
 
-if [ ! -d /config/plugins ]; then
-    echo "Initializing plugins directory"
-    mkdir -pv /config/plugins
+if [ ! -d /app/config/plugins ]; then
+    echo "Creating plugins directory..."
+    mkdir -pv /app/config/plugins
 fi
 
-exec /app/ArchiSteamFarm-Service.sh --no-restart --process-required --system-required --path /config
+exec ArchiSteamFarm --no-restart --process-required --system-required --path /app/config
