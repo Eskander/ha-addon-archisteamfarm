@@ -1,14 +1,14 @@
 # Home Assistant Add-on: ArchiSteamFarm
 
 ## How to use
-Set "*Show in sidebar*" setting (found on **Info** tab) to "*on*" to add ArchiSteamFarm to Home Assistant sidebar.
+Enable "**Show in sidebar**" setting to add ArchiSteamFarm to Home Assistant sidebar.
 
-You can also access ASF-ui on `homeassistant.local:port` by defining a **port** on **Configuration** tab.
+The web interface can also be accessed on `homeassistant.local:port` by defining a **port** on **Configuration** tab.
 
 ## Configuration
-Configuration folder is found on `/addon_configs/bccc8195_archisteamfarm`
+Configuration directory is found in `/addon_configs/bccc8195_archisteamfarm`
 
-See ASF [documentation](https://github.com/JustArchiNET/ArchiSteamFarm/wiki) for information about configuration options.
+See [ASF wiki](https://github.com/JustArchiNET/ArchiSteamFarm/wiki) for configuration options.
 
 ## Support
-For bug reports, [open an issue on GitHub](https://github.com/Eskander/ha-addon-archisteamfarm/issues).
+For add-on bug reports, [open an issue on GitHub](https://github.com/Eskander/ha-addon-archisteamfarm/issues).
