@@ -20,7 +20,7 @@ ports_description:
 map:
   - type: addon_config
     read_only: false
-    path: /config
+    path: /app/config
   - type: data
     read_only: false
     path: /app/logs
