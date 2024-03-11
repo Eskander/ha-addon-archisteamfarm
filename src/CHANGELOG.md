@@ -1,3 +1,5 @@
+## 1.7
+- Bump ASF version
 ## 1.6
 - Bump ASF version
 ## 1.5
