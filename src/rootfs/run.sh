@@ -11,4 +11,4 @@ if [ ! -d /app/config/plugins ]; then
     mkdir -pv /app/config/plugins
 fi
 
-exec ArchiSteamFarm --no-restart --process-required --system-required --path /app/config
+exec ArchiSteamFarm --no-restart --system-required --path /app/config

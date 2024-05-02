@@ -1,3 +1,7 @@
+## 1.10
+- ArchiSteamFarm V6.0.2.6
+## 1.9
+- ArchiSteamFarm V6.0.1.24
 ## 1.8
 - Bump ASF version
 ## 1.7
