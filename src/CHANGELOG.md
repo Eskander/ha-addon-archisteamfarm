@@ -1,3 +1,5 @@
+## 1.11
+- ArchiSteamFarm V6.0.3.4
 ## 1.10
 - ArchiSteamFarm V6.0.2.6
 ## 1.9
