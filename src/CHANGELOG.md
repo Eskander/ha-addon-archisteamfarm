@@ -1,3 +1,5 @@
+# 1.15
+- ArchiSteamFarm V6.0.7.5
 ## 1.14
 - ArchiSteamFarm V6.0.6.4
 ## 1.13
@@ -11,11 +13,11 @@
 ## 1.9
 - ArchiSteamFarm V6.0.1.24
 ## 1.8
-- Bump ASF version
+- ArchiSteamFarm V6.0.0.3
 ## 1.7
-- Bump ASF version
+- ArchiSteamFarm V5.5.3.4
 ## 1.6
-- Bump ASF version
+- ArchiSteamFarm V5.5.2.3
 ## 1.5
 - Use new Supervisor map (>= 2023.12.1)
 ## 1.4
@@ -25,6 +27,6 @@
 ## 1.2
 - Add documentation
 ## 1.1
-- Update ASF to 5.5.0.11
+- ArchiSteamFarm V5.5.0.11
 ## 1.0
 - Initial release
