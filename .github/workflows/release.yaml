@@ -19,22 +19,23 @@ jobs:
 
       - name: Extract current version and PR title
         id: extract
+        env:
+          PR_TITLE: ${{ github.event.pull_request.title }}
         run: |
           # Extract current version from config.yaml
           CURRENT_VERSION=$(grep "version:" src/config.yaml | sed 's/.*: "\(.*\)"/\1/')
           echo "current_version=$CURRENT_VERSION" >> $GITHUB_OUTPUT
           
           # Calculate new version (bump minor)
-          MAJOR=$(echo $CURRENT_VERSION | cut -d. -f1)
-          MINOR=$(echo $CURRENT_VERSION | cut -d. -f2)
+          MAJOR=$(echo "$CURRENT_VERSION" | cut -d. -f1)
+          MINOR=$(echo "$CURRENT_VERSION" | cut -d. -f2)
           NEW_MINOR=$((MINOR + 1))
           NEW_VERSION="$MAJOR.$NEW_MINOR"
           echo "new_version=$NEW_VERSION" >> $GITHUB_OUTPUT
           
-          # Clean PR title (remove "in /src" if present)
-          PR_TITLE="${{ github.event.pull_request.title }}"
-          CLEAN_TITLE=${PR_TITLE%" in /src"}
-          echo "pr_title=$CLEAN_TITLE" >> $GITHUB_OUTPUT
+          # Clean PR title (remove backticks and "in /src")
+          CLEAN_TITLE=$(echo "$PR_TITLE" | sed 's/`//g' | sed 's/ in \/src$//')
+          echo "pr_title=${CLEAN_TITLE}" >> $GITHUB_OUTPUT
 
       - name: Update version in config.yaml
         run: |
