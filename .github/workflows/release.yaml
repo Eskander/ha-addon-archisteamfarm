@@ -13,9 +13,6 @@ jobs:
       contains(github.event.pull_request.title, 'justarchinet/archisteamfarm')
     runs-on: ubuntu-latest
 
-    env:
-      PR_TITLE: ${{ github.event.pull_request.title }}
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -38,11 +35,14 @@ jobs:
         id: update_changelog
         run: |
           # Directly use PR_TITLE in changelog entry without modification
+          pr_title="${{ github.event.pull_request.title }}"
           new_version="${{ env.new_version }}"
-          pr_title="${PR_TITLE}"
+
+          # Remove the " in /src" part from the pr_title
+          pr_title_cleaned=$(echo "$pr_title" | sed 's/ in \/src$//')
 
           # Use printf to safely format changelog entry with backticks intact
-          changelog_entry=$(printf "# %s\n- %s\n" "$new_version" "$pr_title")
+          changelog_entry=$(printf "# %s\n- %s\n" "$new_version" "$pr_title_cleaned")
 
           # Prepend the new entry to src/CHANGELOG.md
           echo -e "$changelog_entry" | cat - src/CHANGELOG.md > temp_file && mv temp_file src/CHANGELOG.md
