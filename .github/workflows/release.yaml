@@ -45,7 +45,7 @@ jobs:
           changelog_entry=$(printf "# %s\n- %s\n" "$new_version" "$pr_title")
 
           # Prepend the new entry to src/CHANGELOG.md
-          sed -i "1s|^|$changelog_entry\n|" src/CHANGELOG.md
+          echo -e "$changelog_entry" | cat - src/CHANGELOG.md > temp_file && mv temp_file src/CHANGELOG.md
 
       - name: Commit and push changes
         run: |
