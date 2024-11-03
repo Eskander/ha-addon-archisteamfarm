@@ -1,0 +1,52 @@
+name: Bump version on Dependabot PR merge
+
+on:
+  pull_request:
+    types:
+      - closed
+
+jobs:
+  bump-version:
+    if: >
+      github.event.pull_request.merged == true &&
+      startsWith(github.event.pull_request.user.login, 'dependabot') &&
+      contains(github.event.pull_request.title, 'justarchinet/archisteamfarm')
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Bump version in config.yaml
+        id: bump_version
+        run: |
+          # Extract current version from src/config.yaml
+          current_version=$(grep -oP 'version:\s*"\K[\d.]+' src/config.yaml)
+          IFS='.' read -r major minor patch <<< "$current_version"
+          new_version="$major.$minor.$((patch + 1))"
+
+          # Replace the version in src/config.yaml
+          sed -i "s/version: \"$current_version\"/version: \"$new_version\"/" src/config.yaml
+
+          # Output the new version for later use
+          echo "new_version=$new_version" >> $GITHUB_ENV
+
+      - name: Update CHANGELOG.md
+        id: update_changelog
+        run: |
+          pr_title="${{ github.event.pull_request.title }}"
+          new_version="${{ env.new_version }}"
+
+          # Format the new entry for CHANGELOG.md
+          changelog_entry="# $new_version\n- $pr_title\n"
+
+          # Prepend the new entry to src/CHANGELOG.md
+          sed -i "1s|^|$changelog_entry\n|" src/CHANGELOG.md
+
+      - name: Commit and push changes
+        run: |
+          git config --local user.name "github-actions[bot]"
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git add src/config.yaml src/CHANGELOG.md
+          git commit -m "Bump version to ${{ env.new_version }} and update CHANGELOG"
+          git push
