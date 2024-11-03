@@ -37,13 +37,12 @@ jobs:
       - name: Update CHANGELOG.md
         id: update_changelog
         run: |
-          # Remove backticks from PR_TITLE and set the cleaned version as pr_title
-          #pr_title=$(echo "$PR_TITLE" | sed 's/`//g')
-
+          # Directly use PR_TITLE in changelog entry without modification
           new_version="${{ env.new_version }}"
+          pr_title="${PR_TITLE}"
 
-          # Format the new entry for CHANGELOG.md
-          changelog_entry="# $new_version\n- $$PR_TITLE\n"
+          # Use printf to safely format changelog entry with backticks intact
+          changelog_entry=$(printf "# %s\n- %s\n" "$new_version" "$pr_title")
 
           # Prepend the new entry to src/CHANGELOG.md
           sed -i "1s|^|$changelog_entry\n|" src/CHANGELOG.md
