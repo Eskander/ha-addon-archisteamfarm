@@ -1,34 +1,34 @@
 # 1.16
-- ArchiSteamFarm V6.0.8.7
+- Bump justarchinet/archisteamfarm from b33e238 to 06b58e9
 # 1.15
-- ArchiSteamFarm V6.0.7.5
+- Bump justarchinet/archisteamfarm from 87da424 to b33e238
 ## 1.14
-- ArchiSteamFarm V6.0.6.4
+- Bump justarchinet/archisteamfarm from 45bad21 to 87da424
 ## 1.13
-- ArchiSteamFarm V6.0.5.2
+- Bump justarchinet/archisteamfarm from 079a717 to 45bad21
 ## 1.12
-- ArchiSteamFarm V6.0.4.4
+- Bump justarchinet/archisteamfarm from ea62c99 to 079a717
 ## 1.11
-- ArchiSteamFarm V6.0.3.4
+- Bump justarchinet/archisteamfarm from 935f0b6 to ea62c99
 ## 1.10
-- ArchiSteamFarm V6.0.2.6
+- Bump justarchinet/archisteamfarm from 79ed3a9 to 935f0b6
 ## 1.9
-- ArchiSteamFarm V6.0.1.24
+- Bump justarchinet/archisteamfarm from f52b4dd to 79ed3a9
 ## 1.8
-- ArchiSteamFarm V6.0.0.3
+- Bump justarchinet/archisteamfarm from 395d823 to f52b4dd
 ## 1.7
-- ArchiSteamFarm V5.5.3.4
+- Bump justarchinet/archisteamfarm from f59b62b to 395d823
 ## 1.6
-- ArchiSteamFarm V5.5.2.3
+- Bump justarchinet/archisteamfarm from ed278ff to f59b62b
 ## 1.5
 - Use new Supervisor map (>= 2023.12.1)
 ## 1.4
-- ArchiSteamFarm V5.5.1.4
+- Bump justarchinet/archisteamfarm from 134e702 to ed278ff
 ## 1.3
-- ArchiSteamFarm V5.5.1.2 
+- Bump justarchinet/archisteamfarm from 5127892 to 134e702
 ## 1.2
 - Add documentation
 ## 1.1
-- ArchiSteamFarm V5.5.0.11
+- Bump justarchinet/archisteamfarm from 7a2686c to 5127892
 ## 1.0
 - Initial release
