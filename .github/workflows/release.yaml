@@ -1,4 +1,4 @@
-name: Bump version on Dependabot PR merge
+name: Release
 
 on:
   pull_request:
