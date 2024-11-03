@@ -34,8 +34,8 @@ jobs:
       - name: Update CHANGELOG.md
         id: update_changelog
         run: |
-          # Get the PR title and remove any backticks
-          pr_title="${{ github.event.pull_request.title }}"
+          # Get the PR title from GitHub context and remove any backticks
+          pr_title='${{ github.event.pull_request.title }}'
           pr_title=${pr_title//\`/}
 
           new_version="${{ env.new_version }}"
