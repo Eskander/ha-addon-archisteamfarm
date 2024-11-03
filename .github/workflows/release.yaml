@@ -37,8 +37,8 @@ jobs:
       - name: Update CHANGELOG.md
         id: update_changelog
         run: |
-          # Get the PR title from environment and remove any backticks
-          pr_title="${PR_TITLE//\`/}"
+          # Remove backticks from PR_TITLE and set the cleaned version as pr_title
+          pr_title=$(echo "$PR_TITLE" | sed 's/`//g')
 
           new_version="${{ env.new_version }}"
 
