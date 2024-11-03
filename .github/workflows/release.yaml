@@ -23,7 +23,7 @@ jobs:
           # Extract current version from src/config.yaml
           current_version=$(grep -oP 'version:\s*"\K[\d.]+' src/config.yaml)
           IFS='.' read -r major minor patch <<< "$current_version"
-          new_version="$major.$minor.$((patch + 1))"
+          new_version="$major.$((minor + 1))"
 
           # Replace the version in src/config.yaml
           sed -i "s/version: \"$current_version\"/version: \"$new_version\"/" src/config.yaml
@@ -34,7 +34,10 @@ jobs:
       - name: Update CHANGELOG.md
         id: update_changelog
         run: |
+          # Get the PR title and remove any backticks
           pr_title="${{ github.event.pull_request.title }}"
+          pr_title=${pr_title//\`/}
+
           new_version="${{ env.new_version }}"
 
           # Format the new entry for CHANGELOG.md
