@@ -1,3 +1,5 @@
+# 1.17
+- Bump justarchinet/archisteamfarm from `b33e238` to `06b58e9` in /src
 # 1.16
 - ArchiSteamFarm V6.0.8.7
 # 1.15
