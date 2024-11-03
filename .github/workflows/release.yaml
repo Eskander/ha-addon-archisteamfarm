@@ -6,54 +6,52 @@ on:
       - closed
 
 jobs:
-  bump-version:
-    if: >
+  version-bump:
+    if: |
       github.event.pull_request.merged == true &&
-      startsWith(github.event.pull_request.user.login, 'dependabot') &&
       contains(github.event.pull_request.title, 'justarchinet/archisteamfarm')
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
-      - name: Bump version in config.yaml
-        id: bump_version
+      - name: Extract current version and PR title
+        id: extract
         run: |
-          # Extract current version from src/config.yaml
-          current_version=$(grep -oP 'version:\s*"\K[\d.]+' src/config.yaml)
-          IFS='.' read -r major minor patch <<< "$current_version"
-          new_version="$major.$((minor + 1))"
+          # Extract current version from config.yaml
+          CURRENT_VERSION=$(grep "version:" src/config.yaml | sed 's/.*: "\(.*\)"/\1/')
+          echo "current_version=$CURRENT_VERSION" >> $GITHUB_OUTPUT
+          
+          # Calculate new version (bump minor)
+          MAJOR=$(echo $CURRENT_VERSION | cut -d. -f1)
+          MINOR=$(echo $CURRENT_VERSION | cut -d. -f2)
+          NEW_MINOR=$((MINOR + 1))
+          NEW_VERSION="$MAJOR.$NEW_MINOR"
+          echo "new_version=$NEW_VERSION" >> $GITHUB_OUTPUT
+          
+          # Clean PR title (remove "in /src" if present)
+          PR_TITLE="${{ github.event.pull_request.title }}"
+          CLEAN_TITLE=${PR_TITLE%" in /src"}
+          echo "pr_title=$CLEAN_TITLE" >> $GITHUB_OUTPUT
 
-          # Replace the version in src/config.yaml
-          sed -i "s/version: \"$current_version\"/version: \"$new_version\"/" src/config.yaml
-
-          # Output the new version for later use
-          echo "new_version=$new_version" >> $GITHUB_ENV
+      - name: Update version in config.yaml
+        run: |
+          sed -i 's/version: ".*"/version: "${{ steps.extract.outputs.new_version }}"/' src/config.yaml
 
       - name: Update CHANGELOG.md
-        id: update_changelog
         run: |
-          # Directly use PR_TITLE in changelog entry without modification
-          new_version="${{ env.new_version }}"
-          pr_title="${{ github.event.pull_request.title }}"
-
-          # Clean the pr_title by removing the " in /src" part
-          pr_title_cleaned=$(echo "$pr_title" | sed 's/ in \/src$//')
-
-          # Use printf to safely format changelog entry with backticks intact
-          changelog_entry=$(printf "# %s\n- %s\n" "$new_version" "$pr_title_cleaned")
-
-          # Prepend the new entry to src/CHANGELOG.md safely
-          {
-            echo -e "$changelog_entry"
-            cat src/CHANGELOG.md
-          } > temp_file && mv temp_file src/CHANGELOG.md
+          # Prepare new entry
+          NEW_ENTRY="# [${{ steps.extract.outputs.new_version }}]\n- ${{ steps.extract.outputs.pr_title }}\n\n"
+          
+          # Prepend new entry to CHANGELOG.md
+          echo -e "$NEW_ENTRY$(cat src/CHANGELOG.md)" > src/CHANGELOG.md
 
       - name: Commit and push changes
         run: |
-          git config --local user.name "github-actions[bot]"
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
           git add src/config.yaml src/CHANGELOG.md
-          git commit -m "Bump version to ${{ env.new_version }} and update CHANGELOG"
+          git commit -m "chore: bump version to ${{ steps.extract.outputs.new_version }}"
           git push
