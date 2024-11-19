@@ -1,3 +1,5 @@
+# 1.17
+- Update justarchinet/archisteamfarm to `06b58e9`
 # 1.16
 - Bump justarchinet/archisteamfarm from b33e238 to 06b58e9
 # 1.15
