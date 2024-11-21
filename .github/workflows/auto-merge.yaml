@@ -1,38 +1,43 @@
 name: Dependabot Auto-Merge
 
 on:
-  pull_request:
+  workflow_call:
+  pull_request_target:
     branches:
       - main
+    paths-ignore:
+      - 'src/Dockerfile'
+
+concurrency:
+  group: dependabot
+  cancel-in-progress: false
 
 permissions:
   contents: write
   pull-requests: write
 
 jobs:
-  dependabot-auto-merge:
+  auto-merge:
+    name: Merge Dependabot PR
     runs-on: ubuntu-latest
-    if: ${{ github.actor == 'dependabot[bot]' }}
+    if: github.actor == 'dependabot[bot]'
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4.2.2
-        with:
-          fetch-depth: 0
-
-      - name: Dependabot metadata
-        id: metadata
-        uses: dependabot/fetch-metadata@v2.2.0
-        with:
-          github-token: "${{ secrets.GITHUB_TOKEN }}"
-
-      - name: Enable auto-merge for Dependabot PRs
-        run: |
-          gh pr merge --auto --merge "${{ github.event.pull_request.number }}"
+      - name: Approve PR
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Add auto-merged label
         run: |
-          gh pr edit "${{ github.event.pull_request.number }}" --add-label "auto-merged"
+          gh pr review --approve ${{github.event.pull_request.html_url}}
+
+      - name: Merge PR
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh pr edit --add-label "auto-merged" "${{ github.event.pull_request.html_url }}"
+          gh pr merge --merge "${{ github.event.pull_request.html_url }}"
+
+      - name: Try Auto-Merge
+        if: failure()
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh pr merge --merge --auto "${{ github.event.pull_request.html_url }}"
