@@ -1,36 +1,36 @@
 # 1.17
-- Update justarchinet/archisteamfarm to 
+- Switch to multi-arch container
 # 1.16
-- Update justarchinet/archisteamfarm to `06b58e9`
+- Update justarchinet/archisteamfarm to V6.0.8.7
 # 1.15
-- Update justarchinet/archisteamfarm to `b33e238`
+- Update justarchinet/archisteamfarm to V6.0.7.5
 ## 1.14
-- Update justarchinet/archisteamfarm to `87da424`
+- Update justarchinet/archisteamfarm to V6.0.6.4
 ## 1.13
-- Update justarchinet/archisteamfarm to `45bad21`
+- Update justarchinet/archisteamfarm to V6.0.5.2
 ## 1.12
-- Update justarchinet/archisteamfarm to `079a717`
+- Update justarchinet/archisteamfarm to V6.0.4.4
 ## 1.11
-- Update justarchinet/archisteamfarm to `ea62c99`
+- Update justarchinet/archisteamfarm to V6.0.3.4
 ## 1.10
-- Update justarchinet/archisteamfarm to `935f0b6`
+- Update justarchinet/archisteamfarm to V6.0.2.6
 ## 1.9
-- Update justarchinet/archisteamfarm to `79ed3a9`
+- Update justarchinet/archisteamfarm to V6.0.1.24
 ## 1.8
-- Update justarchinet/archisteamfarm to `f52b4dd`
+- Update justarchinet/archisteamfarm to V6.0.0.3
 ## 1.7
-- Update justarchinet/archisteamfarm to `395d823`
+- Update justarchinet/archisteamfarm to V5.5.3.4
 ## 1.6
-- Update justarchinet/archisteamfarm to `f59b62b`
+- Update justarchinet/archisteamfarm to V5.5.2.3
 ## 1.5
 - Use new Supervisor map (>= 2023.12.1)
 ## 1.4
-- Update justarchinet/archisteamfarm to `ed278ff`
+- Update justarchinet/archisteamfarm to V5.5.1.4
 ## 1.3
-- Update justarchinet/archisteamfarm to `134e702`
+- Update justarchinet/archisteamfarm to V5.5.1.2 
 ## 1.2
 - Add documentation
 ## 1.1
-- Update justarchinet/archisteamfarm to `5127892`
+- Update justarchinet/archisteamfarm to V5.5.0.11
 ## 1.0
 - Initial release
