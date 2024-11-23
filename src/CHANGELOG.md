@@ -1,3 +1,5 @@
+# 1.18
+- Update justarchinet/archisteamfarm to 6.0.8.7
 # 1.17
 - Switch to multi-arch container
 # 1.16
