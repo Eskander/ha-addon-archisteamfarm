@@ -1,5 +1,5 @@
 #!/usr/bin/env sh
-source get_option.sh
+. /get_option.sh
 
 export ASF_PATH=/app/config
 export ASF_CRYPTKEY=$(get_option "cryptkey")
