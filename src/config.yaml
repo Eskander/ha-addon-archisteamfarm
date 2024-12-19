@@ -13,12 +13,12 @@ init: false
 ingress: true
 ingress_port: 1242
 panel_icon: mdi:steam
-ports:
-  1242/tcp: null
 options:
   cryptkey: ""
 schema:
   cryptkey: str?
+ports:
+  1242/tcp: null
 map:
   - type: addon_config
     path: /app/config
