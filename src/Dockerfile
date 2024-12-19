@@ -3,4 +3,4 @@ FROM ghcr.io/justarchinet/archisteamfarm:latest@sha256:9fb6cff1bf957cbd8ff5c7b62
 # Overlay files
 COPY rootfs /
 
-ENTRYPOINT ["/bin/sh", "/run.sh"]
+ENTRYPOINT ["/run.sh"]
