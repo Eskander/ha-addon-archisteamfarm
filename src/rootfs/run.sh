@@ -1,14 +1,18 @@
-#!/bin/sh
+#!/usr/bin/env sh
+source get_option.sh
 
-if [ ! -f /app/config/config/IPC.config ]; then
+export ASF_PATH=/app/config
+export ASF_CRYPTKEY=$(get_option "cryptkey")
+
+if [ ! -f $ASF_PATH/config/IPC.config ]; then
     echo "Initializing config..."
-    mkdir -pv /app/config/config
-    cp -v /IPC.config /app/config/config/IPC.config
+    mkdir -pv $ASF_PATH/config
+    cp -v /IPC.config $ASF_PATH/config/IPC.config
 fi
 
-if [ ! -d /app/config/plugins ]; then
+if [ ! -d $ASF_PATH/plugins ]; then
     echo "Creating plugins directory..."
-    mkdir -pv /app/config/plugins
+    mkdir -pv $ASF_PATH/plugins
 fi
 
-exec ArchiSteamFarm --no-restart --system-required --path /app/config
+exec ArchiSteamFarm --no-restart --system-required
