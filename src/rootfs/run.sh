@@ -1,8 +1,7 @@
 #!/usr/bin/env sh
-. /get_option.sh
 
 export ASF_PATH=/app/config
-export ASF_CRYPTKEY=$(get_option "cryptkey")
+export ASF_CRYPTKEY=$(/get_option.sh "cryptkey")
 
 if [ ! -f $ASF_PATH/config/IPC.config ]; then
     echo "Initializing config..."
