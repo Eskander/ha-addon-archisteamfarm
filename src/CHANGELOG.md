@@ -1,5 +1,5 @@
 # 1.20
-- TODO
+- Support [ASF Cryptkey](https://github.com/JustArchiNET/ArchiSteamFarm/wiki/Command-Line-Arguments#arguments) in configuration
 # 1.19
 - Update justarchinet/archisteamfarm to 6.1.0.3
 # 1.18
