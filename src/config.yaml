@@ -15,8 +15,10 @@ ingress_port: 1242
 panel_icon: mdi:steam
 ports:
   1242/tcp: null
-ports_description:
-  1242/tcp: Web interface
+options:
+  cryptkey: ""
+schema:
+  cryptkey: str?
 map:
   - type: addon_config
     path: /app/config
