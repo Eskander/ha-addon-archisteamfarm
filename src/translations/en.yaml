@@ -1,6 +1,6 @@
 configuration:
   cryptkey:
     name: ASF_CRYPTKEY
-    description: Set a value of `ASF_CRYPTKEY` environment variable. (Read: https://github.com/JustArchiNET/ArchiSteamFarm/wiki/Command-Line-Arguments#arguments)
+    description: Set `ASF_CRYPTKEY` environment variable value. (https://github.com/JustArchiNET/ArchiSteamFarm/wiki/Command-Line-Arguments#arguments)
 network:
   1242/tcp: Web interface
