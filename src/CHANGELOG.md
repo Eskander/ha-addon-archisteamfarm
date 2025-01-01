@@ -1,3 +1,5 @@
+# 1.21
+- Update justarchinet/archisteamfarm to 6.1.1.3
 # 1.20
 - Support [ASF Cryptkey](https://github.com/JustArchiNET/ArchiSteamFarm/wiki/Command-Line-Arguments#arguments) in configuration
 # 1.19
