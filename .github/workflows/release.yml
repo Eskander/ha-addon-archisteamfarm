@@ -91,7 +91,7 @@ jobs:
           path: ./src
 
       - name: Configure QEMU for Multi-arch Support
-        uses: docker/setup-qemu-action@v3.2.0
+        uses: docker/setup-qemu-action@v3.3.0
         with:
           platforms: linux/amd64,linux/arm64,linux/arm/v7
 
