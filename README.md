@@ -19,7 +19,7 @@ This add-on installs ArchiSteamFarm on [Home Assistant OS](https://www.home-assi
 
 ## Documentation
 
-Add-on documentation is available [here](/archisteamfarm/DOCS.md).
+Add-on documentation is available at [DOCS.md](/src/DOCS.md).
 
 For information about ASF configuration options, see upstream [documentation](https://github.com/JustArchiNET/ArchiSteamFarm/wiki).
 
