@@ -1,4 +1,4 @@
-# Home Assistant Add-on: ArchiSteamFarm
+# ArchiSteamFarm Add-on for Home Assistant
 
 ![Maintenance](https://img.shields.io/maintenance/yes/2025.svg)
 ![Build](https://img.shields.io/github/actions/workflow/status/Eskander/ha-addon-archisteamfarm/.github/workflows/release.yml)
@@ -13,4 +13,4 @@
 
 [ArchiSteamFarm](https://github.com/JustArchiNET/ArchiSteamFarm/) is a C# application with primary purpose of farming Steam cards from multiple accounts simultaneously.
 
-For information about ASF configuration options, see project [documentation](https://github.com/JustArchiNET/ArchiSteamFarm/wiki).
+For information about ASF configuration options, see upstream [documentation](https://github.com/JustArchiNET/ArchiSteamFarm/wiki).
