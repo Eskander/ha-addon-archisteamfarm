@@ -15,7 +15,7 @@
 
 This add-on installs ArchiSteamFarm on [Home Assistant OS](https://www.home-assistant.io/addons/), allowing access through the sidebar or directly via *host:port*.
 
-![screenshot](screenshot.png)
+![screenshot](img/screenshot.png)
 
 ## Documentation
 
