@@ -1,3 +1,5 @@
+## 1.24
+- Update justarchinet/archisteamfarm to 6.1.3.3
 ## 1.23
 - Update justarchinet/archisteamfarm to 6.1.2.3
 ## 1.22
