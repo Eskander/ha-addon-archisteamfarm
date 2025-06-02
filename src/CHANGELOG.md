@@ -1,5 +1,6 @@
 ## 1.27
 - Update justarchinet/archisteamfarm to 6.1.6.7
+- Drop ARMv7 support
 ## 1.26
 - Update justarchinet/archisteamfarm to 6.1.5.2
 ## 1.25
