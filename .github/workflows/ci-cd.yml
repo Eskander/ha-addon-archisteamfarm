@@ -1,4 +1,4 @@
-name: Build & Release
+name: CI/CD
 
 on:
   workflow_dispatch:
@@ -14,11 +14,15 @@ permissions:
   packages: write
 
 jobs:
-  release-process:
-    name: Release Process
+  ci:
+    name: Continuous Integration
     runs-on: ubuntu-latest
     if: github.actor == 'dependabot[bot]' || github.event_name == 'workflow_dispatch'
+    outputs:
+      version: ${{ steps.update-version.outputs.version }}
+      patch: ${{ steps.update-version.outputs.patch }}
     steps:
+
       - name: Process Dependabot Pull Request
         if: github.actor == 'dependabot[bot]'
         env:
@@ -26,7 +30,7 @@ jobs:
         run: |
           # Approve and merge Dependabot PR automatically
           gh pr review ${{ github.event.pull_request.html_url }} --approve
-          gh pr edit ${{ github.event.pull_request.html_url }} --add-label auto-merged,release
+          gh pr edit ${{ github.event.pull_request.html_url }} --add-label auto,release
           gh pr merge ${{ github.event.pull_request.html_url }} --rebase
 
       - name: Get Dependency Metadata
@@ -34,19 +38,26 @@ jobs:
         id: metadata
         uses: dependabot/fetch-metadata@v2
 
-      - name: Determine Package Version
+      - name: Determine Base Package Version
         if: github.actor == 'dependabot[bot]'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          # Try to get version from metadata, fallback to API if not available
-          VERSION="${{ steps.metadata.outputs.new-version }}"
+          set -e
           
-          if [ -z "$VERSION" ]; then
-            VERSION=$(gh api repos/${{ steps.metadata.outputs.dependency-names }}/releases/latest --jq .tag_name)
+          # Try to get base version from metadata, fallback to API if not available
+          BASE_VERSION="${{ steps.metadata.outputs.new-version }}"
+          
+          if [ -z "$BASE_VERSION" ]; then
+            BASE_VERSION=$(gh api repos/${{ steps.metadata.outputs.dependency-names }}/releases/latest --jq .tag_name)
           fi
           
-          echo "PACKAGE_VERSION=$VERSION" >> $GITHUB_ENV
+          if [ -z "$BASE_VERSION" ]; then
+            echo "Failed to determine base package version"
+            exit 1
+          fi
+          
+          echo "BASE_VERSION=$BASE_VERSION" >> $GITHUB_ENV
 
       - name: Checkout Repository
         uses: actions/checkout@v5
@@ -54,23 +65,36 @@ jobs:
           ref: main
 
       - name: Update Version and Changelog
+        id: update-version
         run: |
-          # Get current version from config
+          set -e
+          
+          # Get current addon version from config
           CURRENT_VERSION=$(grep "version:" src/config.yaml | sed 's/.*: "\(.*\)"/\1/')
           
-          # Calculate new version (minor bump)
+          if [ -z "$CURRENT_VERSION" ]; then
+            echo "Failed to read current version from config"
+            exit 1
+          fi
+          
+          # Calculate new addon version (minor bump)
           MAJOR=$(echo "$CURRENT_VERSION" | cut -d. -f1)
           MINOR=$(echo "$CURRENT_VERSION" | cut -d. -f2)
-          NEW_MINOR=$((MINOR + 1))
-          ADDON_VERSION="$MAJOR.$NEW_MINOR"
-          echo "ADDON_VERSION=$ADDON_VERSION" >> $GITHUB_ENV
+          ADDON_VERSION="$MAJOR.$((MINOR + 1))"
+          echo "version=$ADDON_VERSION" >> $GITHUB_OUTPUT
           
-          # Update files with new version
+          # Update addon version in config
           sed -i "s/version: .*/version: \"$ADDON_VERSION\"/" src/config.yaml
+          
+          # Verify version was updated
+          if ! grep -q $ADDON_VERSION src/config.yaml; then
+            echo "Failed to update config.yaml"
+            exit 1
+          fi
           
           # Prepare changelog entry based on trigger type
           if [ "${{ github.actor }}" == "dependabot[bot]" ]; then
-            NEW_ENTRY="## $ADDON_VERSION\n- Update ${{ steps.metadata.outputs.dependency-names }} to ${{ env.PACKAGE_VERSION }}\n"
+            NEW_ENTRY="## $ADDON_VERSION\n- Update ${{ steps.metadata.outputs.dependency-names }} to ${{ env.BASE_VERSION }}\n"
           else
             NEW_ENTRY="## $ADDON_VERSION\n- TODO\n"
           fi
@@ -78,22 +102,27 @@ jobs:
           # Prepend new changelog entry
           echo -e "$NEW_ENTRY$(cat src/CHANGELOG.md)" > src/CHANGELOG.md
           
-          # Configure git and commit changes
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
+          # Verify changelog was updated
+          if ! grep -q $ADDON_VERSION src/CHANGELOG.md; then
+            echo "Failed to update CHANGELOG.md"
+            exit 1
+          fi
+          
+          # Create git patch for deployment
           git add src/config.yaml src/CHANGELOG.md
-          git commit -m "Bump version to $ADDON_VERSION"
-          git push
+          PATCH=$(git diff --cached | base64 -w 0)
+          
+          if [ -z "$PATCH" ]; then
+            echo "Failed to create version patch"
+            exit 1
+          fi
+          
+          echo "patch=$PATCH" >> $GITHUB_OUTPUT
 
       - name: Validate Add-on Configuration
         uses: frenck/action-addon-linter@v2
         with:
           path: ./src
-
-      - name: Configure QEMU for Multi-arch Support
-        uses: docker/setup-qemu-action@v3
-        with:
-          platforms: linux/amd64,linux/arm64
 
       - name: Setup Docker Buildx
         uses: docker/setup-buildx-action@v3
@@ -162,6 +191,30 @@ jobs:
           docker stop test-container
           docker rm test-container
 
+  cd:
+    name: Continuous Deployment
+    runs-on: ubuntu-latest
+    needs: ci
+    steps:
+
+      - name: Checkout Repository
+        uses: actions/checkout@v5
+        with:
+          ref: main
+
+      - name: Apply Version and Changelog Updates
+        run: |
+          # Decode and apply the patch from CI
+          echo "${{ needs.ci.outputs.patch }}" | base64 -d | git apply
+
+      - name: Configure QEMU for Multi-arch Support
+        uses: docker/setup-qemu-action@v3
+        with:
+          platforms: linux/amd64,linux/arm64
+
+      - name: Setup Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
       - name: Authenticate with GitHub Container Registry
         uses: docker/login-action@v3
         with:
@@ -177,10 +230,10 @@ jobs:
         with:
           images: ghcr.io/${{ github.repository }}
           tags: |
-            type=semver,pattern={{major}}.{{minor}},value=${{ env.ADDON_VERSION }}.0
+            type=semver,pattern={{major}}.{{minor}},value=${{ needs.ci.outputs.version }}.0
           labels: |
             io.hass.name=${{ github.event.repository.name }}
-            io.hass.version=${{ env.ADDON_VERSION }}
+            io.hass.version=${{ needs.ci.outputs.version }}
             io.hass.description=${{ github.event.repository.description }}
             io.hass.type=addon
             io.hass.arch=amd64|aarch64
@@ -202,3 +255,12 @@ jobs:
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           annotations: ${{ steps.meta.outputs.annotations }}
+
+      - name: Publish Update
+        run: |
+          # Configure git and commit changes
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add src/config.yaml src/CHANGELOG.md
+          git commit -m "Bump addon version to ${{ needs.ci.outputs.version }}"
+          git push
