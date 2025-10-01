@@ -15,7 +15,7 @@ panel_icon: mdi:steam
 options:
   cryptkey: ""
 schema:
-  cryptkey: str?
+  cryptkey: password?
 ports:
   1242/tcp: null
 map:
